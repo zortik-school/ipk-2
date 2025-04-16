@@ -1,6 +1,7 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.CommandLine.NamingConventionBinder;
+using IPK_2.Chat;
 using IPK_2.Client;
 
 namespace IPK_2.Command;
@@ -67,14 +68,17 @@ public class BaseCommand : ICommand
                 Console.WriteLine($"Timeout: {timeout}");
                 Console.WriteLine($"Retries: {retries}");
 
+                ChatService chatService = new ChatService();
+                SocketClientProvider provider = new SocketClientProvider(chatService);
+
                 SocketClient client;
                 switch (transport)
                 {
                     case "tcp":
-                        client = SocketClientProvider.GetTcpClient(ip, port);
+                        client = provider.GetTcpClient(ip, port);
                         break;
                     case "udp":
-                        client = SocketClientProvider.GetUdpClient();
+                        client = provider.GetUdpClient();
                         break;
                     default:
                         // TODO: Message for invalid transport

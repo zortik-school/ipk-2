@@ -1,8 +1,11 @@
-﻿namespace IPK_2.Client;
+﻿using IPK_2.Chat;
+using IPK_2.Interceptor;
 
-public static class SocketClientProvider
+namespace IPK_2.Client;
+
+public class SocketClientProvider(ChatService chatService)
 {
-    public static SocketClient GetTcpClient(string ip, int port)
+    public SocketClient GetTcpClient(string ip, int port)
     {
         SocketClient client = new Tcp(ip, port);
         
@@ -11,15 +14,14 @@ public static class SocketClientProvider
         return client;
     }
 
-    public static SocketClient GetUdpClient()
+    public SocketClient GetUdpClient()
     {
         // TODO
         return null;
     }
 
-    private static void InitClient(SocketClient client)
+    private void InitClient(SocketClient client)
     {
-        
-        // TODO
+        client.RegisterRequestInterceptor(new AuthInterceptor(chatService));
     }
 }
