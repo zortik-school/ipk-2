@@ -6,6 +6,8 @@ namespace IPK_2.Client;
 
 public class Tcp(string ip, int port) : SocketClient
 {
+    private bool _running;
+    
     public override void Start()
     {
         StartSender();
@@ -13,6 +15,8 @@ public class Tcp(string ip, int port) : SocketClient
 
     private void StartSender()
     {
+        _running = true;
+        
         Parallel.Invoke(() =>
         {
             TcpClient client = new TcpClient(ip, port);
@@ -21,7 +25,7 @@ public class Tcp(string ip, int port) : SocketClient
         
             Console.WriteLine("Connected to server.");
 
-            while (true)
+            while (_running)
             {
                 string? message = Console.ReadLine();
             
@@ -55,6 +59,8 @@ public class Tcp(string ip, int port) : SocketClient
 
     public override void Stop()
     {
-        throw new NotImplementedException();
+        Console.WriteLine("Stopping...");
+
+        _running = false;
     }
 }

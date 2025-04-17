@@ -1,6 +1,6 @@
 ﻿using System.Text;
-using IPK_2.Handler;
 using IPK_2.Interceptor;
+using IPK_2.Message;
 
 namespace IPK_2.Client;
 
@@ -43,6 +43,16 @@ public abstract class SocketClient
     
     protected void HandleResponse(IFlowInterceptor interceptor, RequestContext context, string response)
     {
-        interceptor.InterceptResponse(context, response);
+        List<IMessage> messages = IMessage.Parse(response);
+
+        foreach (IMessage message in messages)
+        {
+            bool processed = interceptor.InterceptResponse(context, message);
+
+            if (!processed)
+            {
+                message.ProcessDefault(context);
+            }
+        }
     }
 }

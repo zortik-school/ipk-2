@@ -14,18 +14,23 @@ public class AuthInterceptor(ChatService service) : IFlowInterceptor
         return true;
     }
 
-    public void InterceptResponse(RequestContext context, string response)
+    public bool InterceptResponse(RequestContext context, IMessage response)
     {
-        ReplyMessage reply = ReplyMessage.Parse(response);
-
-        bool ok = reply.Process();
-
-        service.IsAuthenticated = ok;
-
-        if (ok)
+        if (response is ReplyMessage reply)
         {
-            service.DisplayName = context.Cmd[3];
+            reply.ProcessDefault(context);
+            
+            service.IsAuthenticated = reply.Ok;
+            
+            if (reply.Ok)
+            {
+                service.DisplayName = context.Cmd[3];
+            }
+
+            return true;
         }
+
+        return false;
     }
 
     public bool IsApplicable(string[] args)
