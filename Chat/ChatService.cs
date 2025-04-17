@@ -4,5 +4,9 @@ public class ChatService
 {
     public bool IsAuthenticated { get; set; } = false;
     public string? DisplayName { get; set; } = null;
-    
+
+    public void Close()
+    {
+        // TODO
+    }
 }

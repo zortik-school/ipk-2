@@ -1,6 +1,5 @@
 ﻿using IPK_2.Chat;
 using IPK_2.Message;
-using IPK_2.Util;
 
 namespace IPK_2.Interceptor;
 
@@ -17,19 +16,15 @@ public class AuthInterceptor(ChatService service) : IFlowInterceptor
 
     public void InterceptResponse(RequestContext context, string response)
     {
-        ReplyMessage reply = MessageParser.ParseReplyMessage(response);
+        ReplyMessage reply = ReplyMessage.Parse(response);
 
-        bool ok = reply.Ok;
+        bool ok = reply.Process();
 
         service.IsAuthenticated = ok;
 
         if (ok)
         {
             service.DisplayName = context.Cmd[3];
-        }
-        else
-        {
-            
         }
     }
 

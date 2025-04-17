@@ -23,5 +23,7 @@ public class SocketClientProvider(ChatService chatService)
     private void InitClient(SocketClient client)
     {
         client.RegisterRequestInterceptor(new AuthInterceptor(chatService));
+        client.RegisterRequestInterceptor(new JoinInterceptor(chatService));
+        client.RegisterRequestInterceptor(new MessageInterceptor(chatService));
     }
 }

@@ -7,22 +7,17 @@ namespace IPK_2.Client;
 public abstract class SocketClient
 {
     private readonly List<IFlowInterceptor> _lineInterceptors = [];
-    
-    private readonly List<IIncomingMessageHandler> _handlers = [];
 
     public abstract void Start();
+
+    public abstract void Stop();
     
     public void RegisterRequestInterceptor(IFlowInterceptor interceptor)
     {
         _lineInterceptors.Add(interceptor);
     }
 
-    public void RegisterIncomingMessageHandler(IIncomingMessageHandler handler)
-    {
-        _handlers.Add(handler);
-    }
-
-    protected bool InterceptInput(RequestContext context)
+    protected IFlowInterceptor? InterceptInput(RequestContext context)
     {
         Action<string> sendMessageFunction = message =>
         {
@@ -35,36 +30,19 @@ public abstract class SocketClient
         
         foreach (IFlowInterceptor interceptor in _lineInterceptors)
         {
-            if (interceptor.IsApplicable(context.Cmd))
+            if (interceptor.IsApplicable(context.Cmd) && interceptor.InterceptRequest(context, sendMessageFunction))
             {
-                return interceptor.InterceptRequest(context, sendMessageFunction);
+                return interceptor;
             }
         }
+        
+        Console.WriteLine("No handler for this input");
 
-        return false;
+        return null;
     }
     
-    protected void HandleResponse(RequestContext context, string response)
+    protected void HandleResponse(IFlowInterceptor interceptor, RequestContext context, string response)
     {
-        foreach (IFlowInterceptor interceptor in _lineInterceptors)
-        {
-            if (interceptor.IsApplicable(context.Cmd))
-            {
-                interceptor.InterceptResponse(context, response);
-            }
-        }
-    }
-
-    protected void HandleIncomingMessage(string message)
-    {
-        foreach (IIncomingMessageHandler handler in _handlers)
-        {
-            if (handler.IsApplicable(message))
-            {
-                handler.HandleIncomingMessage(message);
-
-                return;
-            }
-        }
+        interceptor.InterceptResponse(context, response);
     }
 }

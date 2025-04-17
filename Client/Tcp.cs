@@ -8,50 +8,53 @@ public class Tcp(string ip, int port) : SocketClient
 {
     public override void Start()
     {
-        Parallel.Invoke(StartSender, StartReceiver);
+        StartSender();
     }
 
     private void StartSender()
     {
-        TcpClient client = new TcpClient(ip, port);
-        
-        NetworkStream stream = client.GetStream();
-        
-        Console.WriteLine("Connected to server.");
-
-        while (true)
+        Parallel.Invoke(() =>
         {
-            string? message = Console.ReadLine();
-            
-            if (message == null)
+            TcpClient client = new TcpClient(ip, port);
+        
+            NetworkStream stream = client.GetStream();
+        
+            Console.WriteLine("Connected to server.");
+
+            while (true)
             {
-                continue;
-            }
-
-            string[] args = message.Split(" ");
-
-            Dictionary<string, object> metaOfThisFlow = new();
-
-            RequestContext context = new RequestContext(args, stream, metaOfThisFlow);
-
-            bool shouldWait = InterceptInput(context);
+                string? message = Console.ReadLine();
             
-            if (shouldWait)
-            {
-                byte[] data = new byte[1024];
-                int count = stream.Read(data, 0, data.Length);
+                if (message == null)
+                {
+                    continue;
+                }
+
+                string[] args = message.Split(" ");
+
+                Dictionary<string, object> metaOfThisFlow = new();
+
+                RequestContext context = new RequestContext(this, args, stream, metaOfThisFlow);
+
+                IFlowInterceptor? appliedInterceptor = InterceptInput(context);
+            
+                if (appliedInterceptor != null)
+                {
+                    byte[] data = new byte[1024];
+                    int count = stream.Read(data, 0, data.Length);
                 
-                string response = Encoding.UTF8.GetString(data, 0, count);
+                    string response = Encoding.UTF8.GetString(data, 0, count);
                 
-                Console.WriteLine($"Received from server: {response}");
+                    Console.WriteLine($"Received from server: {response}");
                 
-                HandleResponse(context, response);
+                    HandleResponse(appliedInterceptor, context, response);
+                }
             }
-        }
+        });
     }
 
-    private void StartReceiver()
+    public override void Stop()
     {
-        // TODO
+        throw new NotImplementedException();
     }
 }
