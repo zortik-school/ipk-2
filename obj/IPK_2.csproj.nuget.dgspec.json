@@ -1,25 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\konda\\RiderProjects\\IPK_2\\IPK_2\\IPK_2.csproj": {}
+    "/mnt/c/Users/konda/RiderProjects/IPK_2/IPK_2/IPK_2.csproj": {}
   },
   "projects": {
-    "C:\\Users\\konda\\RiderProjects\\IPK_2\\IPK_2\\IPK_2.csproj": {
+    "/mnt/c/Users/konda/RiderProjects/IPK_2/IPK_2/IPK_2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\konda\\RiderProjects\\IPK_2\\IPK_2\\IPK_2.csproj",
+        "projectUniqueName": "/mnt/c/Users/konda/RiderProjects/IPK_2/IPK_2/IPK_2.csproj",
         "projectName": "IPK_2",
-        "projectPath": "C:\\Users\\konda\\RiderProjects\\IPK_2\\IPK_2\\IPK_2.csproj",
-        "packagesPath": "C:\\Users\\konda\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\konda\\RiderProjects\\IPK_2\\IPK_2\\obj\\",
+        "projectPath": "/mnt/c/Users/konda/RiderProjects/IPK_2/IPK_2/IPK_2.csproj",
+        "packagesPath": "/home/zortik/.nuget/packages/",
+        "outputPath": "/mnt/c/Users/konda/RiderProjects/IPK_2/IPK_2/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\konda\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/home/zortik/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "/usr/lib/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -38,7 +39,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -69,7 +70,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\konda\\.dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/9.0.104/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

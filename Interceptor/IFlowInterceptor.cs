@@ -7,11 +7,11 @@ public interface IFlowInterceptor
      * Intercepts the command line arguments and sends something to the server.
      *
      * @param context The context of the request, including the command line arguments and the network stream.
-     * @param sendMessageFunction The function to send a message to the server.
+     * @param sendMessage The function to send a message to the server.
      *
      * @return true if the client should wait for a response from the server, false otherwise
      */
-    bool InterceptRequest(RequestContext context, Action<string> sendMessageFunction);
+    bool InterceptRequest(RequestContext context, Action<string> sendMessage);
     
     /**
      * Intercepts the response from the server.

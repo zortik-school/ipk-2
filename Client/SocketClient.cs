@@ -26,9 +26,11 @@ public abstract class SocketClient
     {
         Action<string> sendMessageFunction = message =>
         {
-            byte[] data = Encoding.UTF8.GetBytes(message);
+            byte[] data = Encoding.ASCII.GetBytes(message);
 
             context.Stream.Write(data, 0, data.Length);
+            
+            Console.WriteLine("Sent to server: " + message);
         };
         
         foreach (IFlowInterceptor interceptor in _lineInterceptors)

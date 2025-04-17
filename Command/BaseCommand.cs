@@ -48,9 +48,9 @@ public class BaseCommand : ICommand
     public ICommandHandler GetHandler()
     {
         return CommandHandler.Create<string, string, ushort, ushort, byte, bool>(
-            (transport, ip, port, timeout, retries, help) =>
+            (t, s, p, d, r, h) =>
             {
-                if (help)
+                if (h)
                 {
                     Console.WriteLine("Help:");
                     Console.WriteLine("  -t\tTransport protocol (tcp or udp)");
@@ -62,20 +62,20 @@ public class BaseCommand : ICommand
                     return;
                 }
 
-                Console.WriteLine($"Transport: {transport}");
-                Console.WriteLine($"IP: {ip}");
-                Console.WriteLine($"Port: {port}");
-                Console.WriteLine($"Timeout: {timeout}");
-                Console.WriteLine($"Retries: {retries}");
+                Console.WriteLine($"Transport: {t}");
+                Console.WriteLine($"IP: {s}");
+                Console.WriteLine($"Port: {p}");
+                Console.WriteLine($"Timeout: {d}");
+                Console.WriteLine($"Retries: {r}");
 
                 ChatService chatService = new ChatService();
                 SocketClientProvider provider = new SocketClientProvider(chatService);
 
                 SocketClient client;
-                switch (transport)
+                switch (t)
                 {
                     case "tcp":
-                        client = provider.GetTcpClient(ip, port);
+                        client = provider.GetTcpClient(s, p);
                         break;
                     case "udp":
                         client = provider.GetUdpClient();
