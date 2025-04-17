@@ -142,25 +142,24 @@
     ]
   },
   "packageFolders": {
-    "/home/zortik/.nuget/packages/": {}
+    "C:\\Users\\konda\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/mnt/c/Users/konda/RiderProjects/IPK_2/IPK_2/IPK_2.csproj",
+      "projectUniqueName": "C:\\Users\\konda\\RiderProjects\\IPK_2\\IPK_2\\IPK_2.csproj",
       "projectName": "IPK_2",
-      "projectPath": "/mnt/c/Users/konda/RiderProjects/IPK_2/IPK_2/IPK_2.csproj",
-      "packagesPath": "/home/zortik/.nuget/packages/",
-      "outputPath": "/mnt/c/Users/konda/RiderProjects/IPK_2/IPK_2/obj/",
+      "projectPath": "C:\\Users\\konda\\RiderProjects\\IPK_2\\IPK_2\\IPK_2.csproj",
+      "packagesPath": "C:\\Users\\konda\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\konda\\RiderProjects\\IPK_2\\IPK_2\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/zortik/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\konda\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
-        "/usr/lib/dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -179,7 +178,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net9.0": {
@@ -210,7 +209,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/9.0.104/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
