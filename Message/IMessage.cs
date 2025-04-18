@@ -1,6 +1,4 @@
-﻿using IPK_2.Interceptor;
-
-namespace IPK_2.Message;
+﻿namespace IPK_2.Message;
 
 public interface IMessage
 {
@@ -13,9 +11,12 @@ public interface IMessage
 
         foreach (var line in lines)
         {
-            IMessage? parsed;
+            IMessage? parsed = null;
 
-            parsed = ReplyMessage.Parse(line);
+            if (parsed == null)
+            {
+                parsed = ReplyMessage.Parse(line);
+            }
             
             if (parsed == null)
             {
@@ -35,6 +36,4 @@ public interface IMessage
 
         return result;
     }
-    
-    void ProcessDefault(RequestContext context);
 }

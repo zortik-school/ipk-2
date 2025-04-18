@@ -1,8 +1,6 @@
-﻿using IPK_2.Interceptor;
+﻿namespace IPK_2.Message;
 
-namespace IPK_2.Message;
-
-public class ErrorMessage(string from, string messageContent) : IMessage
+public record ErrorMessage(string From, string MessageContent) : IMessage
 {
 
     public static ErrorMessage? Parse(string message)
@@ -15,12 +13,5 @@ public class ErrorMessage(string from, string messageContent) : IMessage
         }
 
         return new ErrorMessage(data[2], string.Join(" ", data.Skip(4)));
-    }
-    
-    public void ProcessDefault(RequestContext context)
-    {
-        Console.WriteLine($"Error from {from}: {messageContent}");
-        
-        context.Client.Stop();
     }
 }

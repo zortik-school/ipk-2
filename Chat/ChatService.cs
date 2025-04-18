@@ -2,6 +2,7 @@
 
 public class ChatService
 {
+    public bool AwaitingAuth { get; set; } = false;
     public bool IsAuthenticated { get; set; } = false;
     public string? DisplayName { get; set; } = null;
 

@@ -1,6 +1,4 @@
-﻿using IPK_2.Interceptor;
-
-namespace IPK_2.Message;
+﻿namespace IPK_2.Message;
 
 public record ReplyMessage(bool Ok, string MessageContent) : IMessage
 {
@@ -19,10 +17,5 @@ public record ReplyMessage(bool Ok, string MessageContent) : IMessage
         string content = string.Join(" ", data.Skip(3));
 
         return new ReplyMessage(data[1].Equals("OK"), content);
-    }
-
-    public void ProcessDefault(RequestContext context)
-    {
-        Console.WriteLine($"Reply: {MessageContent}");
     }
 }

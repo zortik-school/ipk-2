@@ -2,7 +2,7 @@
 
 namespace IPK_2.Message;
 
-public class MsgMessage(string from, string messageContent) : IMessage
+public record MsgMessage(string From, string MessageContent) : IMessage
 {
 
     public static MsgMessage? Parse(string message)
@@ -17,8 +17,8 @@ public class MsgMessage(string from, string messageContent) : IMessage
         return new MsgMessage(data[2], string.Join(" ", data.Skip(4)));
     }
     
-    public void ProcessDefault(RequestContext context)
+    public void ProcessDefault(IFlowContext context)
     {
-        Console.WriteLine($"Message from {from}: {messageContent}");
+        Console.WriteLine($"Message from {From}: {MessageContent}");
     }
 }

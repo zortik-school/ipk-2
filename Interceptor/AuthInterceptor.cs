@@ -5,32 +5,32 @@ namespace IPK_2.Interceptor;
 
 public class AuthInterceptor(ChatService service) : IFlowInterceptor
 {
-    public bool InterceptRequest(RequestContext context, Action<string> sendMessage)
+    public Task InterceptRequest(RequestContext context, Action<string> sendMessage, CancellationToken cancellationToken)
     {
         string[] args = context.Cmd;
+        
+        service.AwaitingAuth = true;
 
         sendMessage($"AUTH {args[1]} AS {args[3]} USING {args[2]}\r\n");
-
-        return true;
+        return Task.CompletedTask;
     }
 
-    public bool InterceptResponse(RequestContext context, IMessage response)
+    public Task InterceptResponse(RequestContext? lastRequestContext, ResponseContext context, CancellationToken cancellationToken)
     {
-        if (response is ReplyMessage reply)
+        if (context.Message is not ReplyMessage reply || lastRequestContext == null || !service.AwaitingAuth)
         {
-            reply.ProcessDefault(context);
+            return Task.CompletedTask;
+        }
+        
+        service.AwaitingAuth = false;
+        service.IsAuthenticated = reply.Ok;
             
-            service.IsAuthenticated = reply.Ok;
-            
-            if (reply.Ok)
-            {
-                service.DisplayName = context.Cmd[3];
-            }
-
-            return true;
+        if (reply.Ok)
+        {
+            service.DisplayName = lastRequestContext.Cmd[3];
         }
 
-        return false;
+        return Task.CompletedTask;
     }
 
     public bool IsApplicable(string[] args)

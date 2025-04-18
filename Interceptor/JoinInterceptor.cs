@@ -4,11 +4,11 @@ namespace IPK_2.Interceptor;
 
 public class JoinInterceptor(ChatService service) : IFlowInterceptor
 {
-    public bool InterceptRequest(RequestContext context, Action<string> sendMessage)
+    public Task InterceptRequest(RequestContext context, Action<string> sendMessage, CancellationToken cancellationToken)
     {
         sendMessage($"JOIN {context.Cmd[1]} AS {service.DisplayName}\r\n");
-
-        return true;
+        
+        return Task.CompletedTask;
     }
 
     public bool IsApplicable(string[] args)

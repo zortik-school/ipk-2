@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Sockets;
+using System.Text;
 using IPK_2.Interceptor;
 using IPK_2.Message;
 
@@ -7,6 +8,7 @@ namespace IPK_2.Client;
 public abstract class SocketClient
 {
     private readonly List<IFlowInterceptor> _lineInterceptors = [];
+    private readonly Dictionary<IFlowInterceptor, RequestContext> _lastRequestContexts = new();
 
     public abstract void Start();
 
@@ -17,41 +19,55 @@ public abstract class SocketClient
         _lineInterceptors.Add(interceptor);
     }
 
-    protected IFlowInterceptor? InterceptInput(RequestContext context)
+    private RequestContext? GetLastRequestContext(IFlowInterceptor interceptor)
     {
+        return _lastRequestContexts.GetValueOrDefault(interceptor);
+    }
+
+    protected async Task InterceptInput(NetworkStream stream, string[] args, CancellationToken cancellationToken)
+    {
+        RequestContext context = new RequestContext(this, args, stream);
+        
         Action<string> sendMessageFunction = message =>
         {
             byte[] data = Encoding.ASCII.GetBytes(message);
 
-            context.Stream.Write(data, 0, data.Length);
+            context.Stream.WriteAsync(data, 0, data.Length, cancellationToken);
             
             Console.WriteLine("Sent to server: " + message);
         };
         
+        bool handled = false;
+        
         foreach (IFlowInterceptor interceptor in _lineInterceptors)
         {
-            if (interceptor.IsApplicable(context.Cmd) && interceptor.InterceptRequest(context, sendMessageFunction))
+            if (interceptor.IsApplicable(context.Cmd))
             {
-                return interceptor;
+                await interceptor.InterceptRequest(context, sendMessageFunction, cancellationToken);
+                
+                _lastRequestContexts.Add(interceptor, context);
+
+                handled = true;
             }
         }
-        
-        Console.WriteLine("No handler for this input");
 
-        return null;
+        if (!handled)
+        {
+            Console.WriteLine("No handler for this input");
+        }
     }
     
-    protected void HandleResponse(IFlowInterceptor interceptor, RequestContext context, string response)
+    protected async Task HandleResponse(NetworkStream stream, List<IMessage> messages, CancellationToken cancellationToken)
     {
-        List<IMessage> messages = IMessage.Parse(response);
-
         foreach (IMessage message in messages)
         {
-            bool processed = interceptor.InterceptResponse(context, message);
-
-            if (!processed)
+            ResponseContext context = new ResponseContext(this, stream, message);
+            
+            foreach (IFlowInterceptor interceptor in _lineInterceptors)
             {
-                message.ProcessDefault(context);
+                RequestContext? requestContext = GetLastRequestContext(interceptor);
+                
+                await interceptor.InterceptResponse(requestContext, context, cancellationToken);
             }
         }
     }
