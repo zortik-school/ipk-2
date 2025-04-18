@@ -1,6 +1,4 @@
-﻿using IPK_2.Message;
-
-namespace IPK_2.Interceptor;
+﻿namespace IPK_2.Interceptor;
 
 public interface IFlowInterceptor
 {

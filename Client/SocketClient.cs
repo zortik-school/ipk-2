@@ -19,6 +19,11 @@ public abstract class SocketClient
         _lineInterceptors.Add(interceptor);
     }
 
+    public List<IFlowInterceptor> GetRequestInterceptors()
+    {
+        return [.._lineInterceptors];
+    }
+
     private RequestContext? GetLastRequestContext(IFlowInterceptor interceptor)
     {
         return _lastRequestContexts.GetValueOrDefault(interceptor);

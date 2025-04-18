@@ -3,7 +3,7 @@ using IPK_2.Message;
 
 namespace IPK_2.Interceptor;
 
-public class AuthInterceptor(ChatService service) : IFlowInterceptor
+public class AuthInterceptor(ChatService service) : CommandInterceptor("auth", 4, Int32.MaxValue)
 {
     public Task InterceptRequest(RequestContext context, Action<string> sendMessage, CancellationToken cancellationToken)
     {
@@ -33,13 +33,8 @@ public class AuthInterceptor(ChatService service) : IFlowInterceptor
         return Task.CompletedTask;
     }
 
-    public bool IsApplicable(string[] args)
+    public new bool IsApplicable(string[] args)
     {
-        if (service.IsAuthenticated)
-        {
-            return false;
-        }
-
-        return args.Length > 3 && args[0].Equals("/auth");
+        return !service.IsAuthenticated && base.IsApplicable(args);
     }
 }

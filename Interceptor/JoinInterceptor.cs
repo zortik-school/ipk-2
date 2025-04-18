@@ -2,7 +2,7 @@
 
 namespace IPK_2.Interceptor;
 
-public class JoinInterceptor(ChatService service) : IFlowInterceptor
+public class JoinInterceptor(ChatService service) : CommandInterceptor("join", 2, 2)
 {
     public Task InterceptRequest(RequestContext context, Action<string> sendMessage, CancellationToken cancellationToken)
     {
@@ -11,8 +11,8 @@ public class JoinInterceptor(ChatService service) : IFlowInterceptor
         return Task.CompletedTask;
     }
 
-    public bool IsApplicable(string[] args)
+    public new bool IsApplicable(string[] args)
     {
-        return service.IsAuthenticated && args is ["/join", _];
+        return service.IsAuthenticated && base.IsApplicable(args);
     }
 }
