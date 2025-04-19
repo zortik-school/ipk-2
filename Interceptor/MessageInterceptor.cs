@@ -5,18 +5,19 @@ namespace IPK_2.Interceptor;
 
 public class MessageInterceptor(ChatService service) : IFlowInterceptor
 {
-    public Task InterceptRequest(RequestContext context, Action<string> sendMessage, CancellationToken cancellationToken)
+    public Task<List<IMessage>> InterceptRequest(RequestContext context, CancellationToken cancellationToken)
     {
-        sendMessage($"MSG FROM {service.DisplayName} IS {string.Join(" ", context.Cmd)}\r\n");
+        List<IMessage> toSend =
+            new List<IMessage>([new MsgMessage(service.DisplayName ?? "", string.Join(" ", context.Cmd))]);
 
-        return Task.CompletedTask;
+        return Task.FromResult(toSend);
     }
 
     public Task InterceptResponse(RequestContext? lastRequestContext, ResponseContext context, CancellationToken cancellationToken)
     {
         if (context.Message is MsgMessage msg)
         {
-            Console.WriteLine($"Message from {msg.From}: {msg.MessageContent}");
+            Console.Write($"{msg.From}: {msg.MessageContent}\n");
         }
         
         return Task.CompletedTask;

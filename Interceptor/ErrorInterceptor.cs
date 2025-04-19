@@ -8,7 +8,7 @@ public class ErrorInterceptor : IFlowInterceptor
     {
         if (context.Message is ErrorMessage error)
         {
-            Console.WriteLine($"Error from {error.From}: {error.MessageContent}");
+            Console.Write(error.ToTcp());
         
             context.Client.Stop();
         }

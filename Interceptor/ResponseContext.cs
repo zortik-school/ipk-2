@@ -4,4 +4,4 @@ using IPK_2.Message;
 
 namespace IPK_2.Interceptor;
 
-public record ResponseContext(SocketClient Client, NetworkStream Stream, IMessage Message) : IFlowContext;
+public record ResponseContext(SocketClient Client, IMessage Message) : IFlowContext;

@@ -14,4 +14,14 @@ public record ErrorMessage(string From, string MessageContent) : IMessage
 
         return new ErrorMessage(data[2], string.Join(" ", data.Skip(4)));
     }
+
+    public string ToTcp()
+    {
+        return $"ERROR FROM {From}: {MessageContent}\n";
+    }
+
+    public byte[] ToUdp(byte[] messageId)
+    {
+        throw new NotImplementedException();
+    }
 }

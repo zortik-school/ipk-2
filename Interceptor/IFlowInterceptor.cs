@@ -1,4 +1,6 @@
-﻿namespace IPK_2.Interceptor;
+﻿using IPK_2.Message;
+
+namespace IPK_2.Interceptor;
 
 public interface IFlowInterceptor
 {
@@ -7,11 +9,12 @@ public interface IFlowInterceptor
      * Intercepts the command line arguments and sends something to the server.
      *
      * @param context The context of the request, including the command line arguments and the network stream.
-     * @param sendMessage The function to send a message to the server.
      */
-    Task InterceptRequest(RequestContext context, Action<string> sendMessage, CancellationToken cancellationToken)
+    Task<List<IMessage>> InterceptRequest(RequestContext context, CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        List<IMessage> empty = new();
+        
+        return Task.FromResult(empty);
     }
 
     /**

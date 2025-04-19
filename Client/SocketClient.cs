@@ -1,6 +1,4 @@
-﻿using System.Net.Sockets;
-using System.Text;
-using IPK_2.Interceptor;
+﻿using IPK_2.Interceptor;
 using IPK_2.Message;
 
 namespace IPK_2.Client;
@@ -29,28 +27,23 @@ public abstract class SocketClient
         return _lastRequestContexts.GetValueOrDefault(interceptor);
     }
 
-    protected async Task InterceptInput(NetworkStream stream, string[] args, CancellationToken cancellationToken)
+    protected async Task<List<IMessage>> InterceptInput(string[] args, CancellationToken cancellationToken)
     {
-        RequestContext context = new RequestContext(this, args, stream);
-        
-        Action<string> sendMessageFunction = message =>
-        {
-            byte[] data = Encoding.ASCII.GetBytes(message);
-
-            context.Stream.WriteAsync(data, 0, data.Length, cancellationToken);
-            
-            Console.WriteLine("Sent to server: " + message);
-        };
+        RequestContext context = new RequestContext(this, args);
         
         bool handled = false;
+
+        List<IMessage> messages = [];
         
         foreach (IFlowInterceptor interceptor in _lineInterceptors)
         {
             if (interceptor.IsApplicable(context.Cmd))
             {
-                await interceptor.InterceptRequest(context, sendMessageFunction, cancellationToken);
+                List<IMessage> messagesToSend = await interceptor.InterceptRequest(context, cancellationToken);
                 
-                _lastRequestContexts.Add(interceptor, context);
+                messages.AddRange(messagesToSend);
+
+                _lastRequestContexts[interceptor] = context;
 
                 handled = true;
             }
@@ -60,20 +53,29 @@ public abstract class SocketClient
         {
             Console.WriteLine("No handler for this input");
         }
+
+        return messages;
     }
     
-    protected async Task HandleResponse(NetworkStream stream, List<IMessage> messages, CancellationToken cancellationToken)
+    protected async Task HandleResponse(List<IMessage> messages, CancellationToken cancellationToken)
     {
-        foreach (IMessage message in messages)
+        try
         {
-            ResponseContext context = new ResponseContext(this, stream, message);
-            
-            foreach (IFlowInterceptor interceptor in _lineInterceptors)
+            foreach (IMessage message in messages)
             {
-                RequestContext? requestContext = GetLastRequestContext(interceptor);
+                ResponseContext context = new ResponseContext(this, message);
+            
+                foreach (IFlowInterceptor interceptor in _lineInterceptors)
+                {
+                    RequestContext? requestContext = GetLastRequestContext(interceptor);
                 
-                await interceptor.InterceptResponse(requestContext, context, cancellationToken);
+                    await interceptor.InterceptResponse(requestContext, context, cancellationToken);
+                }
             }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
         }
     }
 }

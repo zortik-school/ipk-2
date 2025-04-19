@@ -21,4 +21,14 @@ public record MsgMessage(string From, string MessageContent) : IMessage
     {
         Console.WriteLine($"Message from {From}: {MessageContent}");
     }
+
+    public string ToTcp()
+    {
+        return $"MSG FROM {From} IS {MessageContent}\r\n";
+    }
+
+    public byte[] ToUdp(byte[] messageId)
+    {
+        throw new NotImplementedException();
+    }
 }

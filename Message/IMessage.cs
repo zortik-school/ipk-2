@@ -3,7 +3,7 @@
 public interface IMessage
 {
 
-    public static List<IMessage> Parse(string message)
+    public static List<IMessage> ParseTcp(string message)
     {
         var result = new List<IMessage>();
 
@@ -11,29 +11,34 @@ public interface IMessage
 
         foreach (var line in lines)
         {
-            IMessage? parsed = null;
+            Func<string, IMessage?>[] parseFunctions = [ReplyMessage.Parse, MsgMessage.Parse, ErrorMessage.Parse];
 
-            if (parsed == null)
+            foreach (Func<string, IMessage?> parseFunc in parseFunctions)
             {
-                parsed = ReplyMessage.Parse(line);
-            }
-            
-            if (parsed == null)
-            {
-                parsed = MsgMessage.Parse(line);
-            }
+                IMessage? parsed = parseFunc(line);
 
-            if (parsed == null)
-            {
-                parsed = ErrorMessage.Parse(line);
-            }
+                if (parsed == null)
+                {
+                    continue;
+                }
 
-            if (parsed != null)
-            {
                 result.Add(parsed);
+                    
+                break;
             }
         }
 
         return result;
     }
+
+    public static List<IMessage> ParseUdp(byte[] data)
+    {
+        
+        // TODO
+        return new List<IMessage>();
+    }
+
+    string ToTcp();
+
+    byte[] ToUdp(byte[] messageId);
 }

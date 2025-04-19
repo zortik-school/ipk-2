@@ -1,9 +1,10 @@
-﻿namespace IPK_2.Interceptor;
+﻿using IPK_2.Message;
+
+namespace IPK_2.Interceptor;
 
 public class HelpInterceptor() : CommandInterceptor("help", 1, 1)
 {
-    public Task InterceptRequest(RequestContext context, Action<string> sendMessage,
-        CancellationToken cancellationToken)
+    public override Task<List<IMessage>> InterceptRequest(RequestContext context, CancellationToken cancellationToken)
     {
         foreach (IFlowInterceptor interceptor in context.Client.GetRequestInterceptors())
         {
@@ -13,6 +14,12 @@ public class HelpInterceptor() : CommandInterceptor("help", 1, 1)
             }
         }
 
+        return Task.FromResult(new List<IMessage>());
+    }
+
+    public override Task InterceptResponse(RequestContext? lastRequestContext, ResponseContext context,
+        CancellationToken cancellationToken)
+    {
         return Task.CompletedTask;
     }
 }

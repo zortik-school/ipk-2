@@ -5,17 +5,18 @@ namespace IPK_2.Interceptor;
 
 public class AuthInterceptor(ChatService service) : CommandInterceptor("auth", 4, Int32.MaxValue)
 {
-    public Task InterceptRequest(RequestContext context, Action<string> sendMessage, CancellationToken cancellationToken)
+    public override Task<List<IMessage>> InterceptRequest(RequestContext context, CancellationToken cancellationToken)
     {
         string[] args = context.Cmd;
         
         service.AwaitingAuth = true;
 
-        sendMessage($"AUTH {args[1]} AS {args[3]} USING {args[2]}\r\n");
-        return Task.CompletedTask;
+        List<IMessage> toSend = new([new AuthMessage(args[1], string.Join(" ", args.Skip(3)), args[2])]);
+        
+        return Task.FromResult(toSend);
     }
 
-    public Task InterceptResponse(RequestContext? lastRequestContext, ResponseContext context, CancellationToken cancellationToken)
+    public override Task InterceptResponse(RequestContext? lastRequestContext, ResponseContext context, CancellationToken cancellationToken)
     {
         if (context.Message is not ReplyMessage reply || lastRequestContext == null || !service.AwaitingAuth)
         {

@@ -18,4 +18,14 @@ public record ReplyMessage(bool Ok, string MessageContent) : IMessage
 
         return new ReplyMessage(data[1].Equals("OK"), content);
     }
+
+    public string ToTcp()
+    {
+        throw new NotImplementedException();
+    }
+
+    public byte[] ToUdp(byte[] messageId)
+    {
+        throw new NotImplementedException();
+    }
 }
