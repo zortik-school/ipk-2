@@ -84,7 +84,7 @@ public class BaseCommand : ICommand
                         (client as Udp)!.Timeout = d;
                         break;
                     default:
-                        // TODO: Message for invalid transport
+                        Console.Error.WriteLine("Invalid transport protocol");
                         return;
                 }
 
