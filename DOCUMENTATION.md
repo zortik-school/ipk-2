@@ -99,4 +99,5 @@ Aplikaci lze spustit sestavením pomocí příkazu `make` a následném spuště
 
 ## Licence a reference
 
-Nejsem autor uvedených testů. Zdroj testů najdete [zde](https://github.com/Vlad6422/VUT_IPK_CLIENT_TESTS)
+Nejsem autor uvedených testů. Zdroj testů najdete [zde](https://github.com/Vlad6422/VUT_IPK_CLIENT_TESTS).
+V projektu jsem využil na konzultace a generování struktury dokumentace umělou inteligenci ChatGPT.
