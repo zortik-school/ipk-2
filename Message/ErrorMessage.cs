@@ -1,9 +1,11 @@
-﻿namespace IPK_2.Message;
+﻿using IPK_2.Util;
 
-public record ErrorMessage(string From, string MessageContent) : IMessage
+namespace IPK_2.Message;
+
+public record ErrorMessage(string From, string MessageContent, ushort? MessageId = null, ushort? RefMessageId = null) : IMessage
 {
 
-    public static ErrorMessage? Parse(string message)
+    public static ErrorMessage? ParseTcp(string message)
     {
         string[] data = message.Split(" ");
 
@@ -15,6 +17,25 @@ public record ErrorMessage(string From, string MessageContent) : IMessage
         return new ErrorMessage(data[2], string.Join(" ", data.Skip(4)));
     }
 
+    public static ErrorMessage? ParseUdp(byte[] data)
+    {
+        if (data.Length < 4 || data[0] != 0xFE)
+        {
+            return null;
+        }
+
+        using MemoryStream stream = new(data);
+        using BinaryReader reader = new(stream);
+
+        reader.ReadByte();
+        ushort messageId = reader.ReadUInt16();
+
+        string from = BytesUtil.ReadNullTerminatedString(reader);
+        string messageContent = BytesUtil.ReadNullTerminatedString(reader);
+
+        return new ErrorMessage(from, messageContent, messageId);
+    }
+
     public string ToTcp()
     {
         return $"ERROR FROM {From}: {MessageContent}\n";
@@ -22,6 +43,19 @@ public record ErrorMessage(string From, string MessageContent) : IMessage
 
     public byte[] ToUdp(byte[] messageId)
     {
-        throw new NotImplementedException();
+        if (messageId.Length != 2)
+        {
+            throw new ArgumentException("MessageId must be exactly 2 bytes.");
+        }
+
+        using MemoryStream stream = new();
+        using BinaryWriter writer = new(stream);
+
+        writer.Write((byte) 0xFE);
+        writer.Write(messageId);
+        BytesUtil.WriteNullTerminatedString(writer, From);
+        BytesUtil.WriteNullTerminatedString(writer, MessageContent);
+
+        return stream.ToArray();
     }
 }

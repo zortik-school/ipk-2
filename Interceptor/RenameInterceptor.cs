@@ -12,10 +12,10 @@ public class RenameInterceptor(ChatService service) : CommandInterceptor("rename
         return Task.FromResult(new List<IMessage>());
     }
 
-    public override Task InterceptResponse(RequestContext? lastRequestContext, ResponseContext context,
+    public override Task<List<IMessage>> InterceptResponse(RequestContext? lastRequestContext, ResponseContext context,
         CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        return Task.FromResult(new List<IMessage>());
     }
 
     public new bool IsApplicable(string[] args)

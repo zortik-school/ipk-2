@@ -2,18 +2,16 @@
 
 namespace IPK_2.Interceptor;
 
-public class ReplyInterceptor : IFlowInterceptor
+public class ByeInterceptor : IFlowInterceptor
 {
     public Task<List<IMessage>> InterceptResponse(RequestContext? lastRequestContext, ResponseContext context,
         CancellationToken cancellationToken)
     {
-        if (context.Message is ReplyMessage reply)
+        if (context.Message is ByeMessage byeMessage)
         {
-            string state = reply.Ok ? "Success" : "Failure";
-        
-            Console.Write($"Action {state}: {reply.MessageContent}\n");
+            context.Client.Stop();
         }
-        
+
         return Task.FromResult(new List<IMessage>());
     }
 }

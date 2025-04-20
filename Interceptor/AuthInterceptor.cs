@@ -16,11 +16,11 @@ public class AuthInterceptor(ChatService service) : CommandInterceptor("auth", 4
         return Task.FromResult(toSend);
     }
 
-    public override Task InterceptResponse(RequestContext? lastRequestContext, ResponseContext context, CancellationToken cancellationToken)
+    public override Task<List<IMessage>> InterceptResponse(RequestContext? lastRequestContext, ResponseContext context, CancellationToken cancellationToken)
     {
         if (context.Message is not ReplyMessage reply || lastRequestContext == null || !service.AwaitingAuth)
         {
-            return Task.CompletedTask;
+            return Task.FromResult(new List<IMessage>());
         }
         
         service.AwaitingAuth = false;
@@ -31,7 +31,7 @@ public class AuthInterceptor(ChatService service) : CommandInterceptor("auth", 4
             service.DisplayName = lastRequestContext.Cmd[3];
         }
 
-        return Task.CompletedTask;
+        return Task.FromResult(new List<IMessage>());
     }
 
     public new bool IsApplicable(string[] args)

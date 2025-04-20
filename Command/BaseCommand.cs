@@ -52,21 +52,21 @@ public class BaseCommand : ICommand
             {
                 if (h)
                 {
-                    Console.WriteLine("Help:");
-                    Console.WriteLine("  -t\tTransport protocol (tcp or udp)");
-                    Console.WriteLine("  -s\tServer IP address or hostname");
-                    Console.WriteLine("  -p\tServer port (default: 4567)");
-                    Console.WriteLine("  -d\tUDP confirmation timeout in ms (default: 250)");
-                    Console.WriteLine("  -r\tMaximum UDP retransmissions (default: 3)");
-                    Console.WriteLine("  -h\tShow this help");
+                    Console.Error.WriteLine("Help:");
+                    Console.Error.WriteLine("  -t\tTransport protocol (tcp or udp)");
+                    Console.Error.WriteLine("  -s\tServer IP address or hostname");
+                    Console.Error.WriteLine("  -p\tServer port (default: 4567)");
+                    Console.Error.WriteLine("  -d\tUDP confirmation timeout in ms (default: 250)");
+                    Console.Error.WriteLine("  -r\tMaximum UDP retransmissions (default: 3)");
+                    Console.Error.WriteLine("  -h\tShow this help");
                     return;
                 }
 
-                Console.WriteLine($"Transport: {t}");
-                Console.WriteLine($"IP: {s}");
-                Console.WriteLine($"Port: {p}");
-                Console.WriteLine($"Timeout: {d}");
-                Console.WriteLine($"Retries: {r}");
+                Console.Error.WriteLine($"Transport: {t}");
+                Console.Error.WriteLine($"IP: {s}");
+                Console.Error.WriteLine($"Port: {p}");
+                Console.Error.WriteLine($"Timeout: {d}");
+                Console.Error.WriteLine($"Retries: {r}");
 
                 ChatService chatService = new ChatService();
                 SocketClientProvider provider = new SocketClientProvider(chatService);
@@ -78,7 +78,10 @@ public class BaseCommand : ICommand
                         client = provider.GetTcpClient(s, p);
                         break;
                     case "udp":
-                        client = provider.GetUdpClient();
+                        client = provider.GetUdpClient(s, p);
+
+                        (client as Udp)!.Retransmissions = r;
+                        (client as Udp)!.Timeout = d;
                         break;
                     default:
                         // TODO: Message for invalid transport

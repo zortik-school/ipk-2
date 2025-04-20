@@ -1,30 +1,23 @@
-﻿# Název projektu (změň dle potřeby)
-PROJECT_NAME=IPK_2
+﻿PROJECT_NAME=ipk25-client
 
-# Výchozí konfigurace a adresář výstupu
 CONFIGURATION=Release
 OUTPUT_DIR=bin/$(CONFIGURATION)
 
-# Defaultní cíl
 all: build
 
-# Build projektu
 build:
 	dotnet build $(PROJECT_NAME).csproj -c $(CONFIGURATION)
 
-# Spuštění projektu
 run:
 	dotnet run --project $(PROJECT_NAME).csproj -c $(CONFIGURATION)
 
-# Vyčištění výstupních souborů
 clean:
 	dotnet clean $(PROJECT_NAME).csproj
 
-# Publikace aplikace
 publish:
-	dotnet publish $(PROJECT_NAME).csproj -c $(CONFIGURATION) -o $(OUTPUT_DIR)/publish
+	dotnet publish $(PROJECT_NAME).csproj -c $(CONFIGURATION) -r linux-x64 --self-contained true /p:PublishSingleFile=true -o $(OUTPUT_DIR)/publish
+	cp $(OUTPUT_DIR)/publish/$(PROJECT_NAME) ./ipk25-client
 
-# Testování (pokud máš testovací projekt)
 test:
 	dotnet test
 

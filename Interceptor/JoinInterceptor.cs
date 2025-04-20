@@ -17,9 +17,9 @@ public class JoinInterceptor(ChatService service) : CommandInterceptor("join", 2
         return service.IsAuthenticated && base.IsApplicable(args);
     }
 
-    public override Task InterceptResponse(RequestContext? lastRequestContext, ResponseContext context,
+    public override Task<List<IMessage>> InterceptResponse(RequestContext? lastRequestContext, ResponseContext context,
         CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        return Task.FromResult(new List<IMessage>());
     }
 }

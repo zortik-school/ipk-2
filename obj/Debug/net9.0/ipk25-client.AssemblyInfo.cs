@@ -10,12 +10,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("IPK_2")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("ipk25-client")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ad7948dada3ad2e7a8b37b8d3ae69c6b7313835f")]
-[assembly: System.Reflection.AssemblyProductAttribute("IPK_2")]
-[assembly: System.Reflection.AssemblyTitleAttribute("IPK_2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0bb54f5d354b3e90d1ecf77ead9b08fe5c68fb67")]
+[assembly: System.Reflection.AssemblyProductAttribute("ipk25-client")]
+[assembly: System.Reflection.AssemblyTitleAttribute("ipk25-client")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Vygenerované třídou WriteCodeFragment nástroje MSBuild

@@ -2,6 +2,26 @@
 
 public interface IMessage
 {
+    private static readonly Func<string, IMessage?>[] ParseFunctionsTcp =
+    [
+        ReplyMessage.ParseTcp,
+        MsgMessage.ParseTcp,
+        ErrorMessage.ParseTcp,
+        ByeMessage.ParseTcp
+    ];
+
+    private static readonly Func<byte[], IMessage?>[] ParseFunctionsUdp =
+    [
+        ReplyMessage.ParseUdp,
+        ConfirmMessage.ParseUdp,
+        MsgMessage.ParseUdp,
+        PingMessage.ParseUdp,
+        ErrorMessage.ParseUdp
+    ];
+
+    ushort? MessageId { get; }
+
+    ushort? RefMessageId { get; }
 
     public static List<IMessage> ParseTcp(string message)
     {
@@ -11,9 +31,7 @@ public interface IMessage
 
         foreach (var line in lines)
         {
-            Func<string, IMessage?>[] parseFunctions = [ReplyMessage.Parse, MsgMessage.Parse, ErrorMessage.Parse];
-
-            foreach (Func<string, IMessage?> parseFunc in parseFunctions)
+            foreach (Func<string, IMessage?> parseFunc in ParseFunctionsTcp)
             {
                 IMessage? parsed = parseFunc(line);
 
@@ -33,12 +51,28 @@ public interface IMessage
 
     public static List<IMessage> ParseUdp(byte[] data)
     {
+        List<IMessage> result = new();
         
-        // TODO
-        return new List<IMessage>();
+        foreach (var parseFunc in ParseFunctionsUdp)
+        {
+            IMessage? parsedMessage = parseFunc(data);
+
+            if (parsedMessage != null)
+            {
+                result.Add(parsedMessage);
+                break;
+            }
+        }
+
+        return result;
     }
 
     string ToTcp();
 
     byte[] ToUdp(byte[] messageId);
+
+    bool ExpectsConfirmation()
+    {
+        return true;
+    }
 }

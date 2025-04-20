@@ -14,10 +14,13 @@ public class SocketClientProvider(ChatService chatService)
         return client;
     }
 
-    public SocketClient GetUdpClient()
+    public SocketClient GetUdpClient(string ip, int port)
     {
-        // TODO
-        return null;
+        SocketClient client = new Udp(ip, port);
+        
+        InitClient(client);
+
+        return client;
     }
 
     private void InitClient(SocketClient client)
@@ -29,5 +32,6 @@ public class SocketClientProvider(ChatService chatService)
         client.RegisterRequestInterceptor(new HelpInterceptor());
         client.RegisterRequestInterceptor(new ErrorInterceptor());
         client.RegisterRequestInterceptor(new ReplyInterceptor());
+        client.RegisterRequestInterceptor(new ByeInterceptor());
     }
 }

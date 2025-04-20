@@ -25,9 +25,9 @@ public interface IFlowInterceptor
      * @param context The context of the response.
      * @param response The response from server
      */
-    Task InterceptResponse(RequestContext? lastRequestContext, ResponseContext context, CancellationToken cancellationToken)
+    Task<List<IMessage>> InterceptResponse(RequestContext? lastRequestContext, ResponseContext context, CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        return Task.FromResult(new List<IMessage>());
     }
 
     /**

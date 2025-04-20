@@ -16,7 +16,7 @@ public class Tcp(string ip, int port) : SocketClient
         TcpClient client = new TcpClient(ip, port);
         _stream = client.GetStream();
         
-        Console.WriteLine("Connected to server.");
+        Console.Error.WriteLine("Connected to server.");
         
         CancellationToken cancellationToken = _cancellationTokenSource.Token;
 
@@ -66,7 +66,7 @@ public class Tcp(string ip, int port) : SocketClient
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
+                        Console.Error.WriteLine(e);
                     }
                 }, cancellationToken);
             }
@@ -95,7 +95,15 @@ public class Tcp(string ip, int port) : SocketClient
 
                 List<IMessage> messages = IMessage.ParseTcp(response);
 
-                Task.Run(() => HandleResponse(messages, cancellationToken), cancellationToken);
+                Task.Run(async () =>
+                {
+                    List<IMessage> messagesToSend = await HandleResponse(messages, cancellationToken);
+                    
+                    foreach (IMessage messageToSend in messagesToSend)
+                    {
+                        await SendMessage(messageToSend, cancellationToken);
+                    }
+                }, cancellationToken);
             }
         }
         catch (OperationCanceledException e)
@@ -105,8 +113,6 @@ public class Tcp(string ip, int port) : SocketClient
 
     public override void Stop()
     {
-        Console.WriteLine("Stopping...");
-        
         _cancellationTokenSource.Cancel();
         
         _stream?.Close();

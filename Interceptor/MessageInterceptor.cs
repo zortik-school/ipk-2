@@ -13,14 +13,14 @@ public class MessageInterceptor(ChatService service) : IFlowInterceptor
         return Task.FromResult(toSend);
     }
 
-    public Task InterceptResponse(RequestContext? lastRequestContext, ResponseContext context, CancellationToken cancellationToken)
+    public Task<List<IMessage>> InterceptResponse(RequestContext? lastRequestContext, ResponseContext context, CancellationToken cancellationToken)
     {
         if (context.Message is MsgMessage msg)
         {
             Console.Write($"{msg.From}: {msg.MessageContent}\n");
         }
         
-        return Task.CompletedTask;
+        return Task.FromResult(new List<IMessage>());
     }
 
     public bool IsApplicable(string[] args)

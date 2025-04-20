@@ -8,7 +8,7 @@ public abstract class CommandInterceptor(string name, int minArgs, int maxArgs) 
     
     public abstract Task<List<IMessage>> InterceptRequest(RequestContext context, CancellationToken cancellationToken);
 
-    public abstract Task InterceptResponse(RequestContext? lastRequestContext, ResponseContext context,
+    public abstract Task<List<IMessage>> InterceptResponse(RequestContext? lastRequestContext, ResponseContext context,
         CancellationToken cancellationToken);
     
     public bool IsApplicable(string[] args)

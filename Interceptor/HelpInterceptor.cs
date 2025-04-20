@@ -17,9 +17,9 @@ public class HelpInterceptor() : CommandInterceptor("help", 1, 1)
         return Task.FromResult(new List<IMessage>());
     }
 
-    public override Task InterceptResponse(RequestContext? lastRequestContext, ResponseContext context,
+    public override Task<List<IMessage>> InterceptResponse(RequestContext? lastRequestContext, ResponseContext context,
         CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        return Task.FromResult(new List<IMessage>());
     }
 }

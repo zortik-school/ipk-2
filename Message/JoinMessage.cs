@@ -1,6 +1,8 @@
-﻿namespace IPK_2.Message;
+﻿using System.Text;
 
-public record JoinMessage(string ChannelName, string DisplayName) : IMessage
+namespace IPK_2.Message;
+
+public record JoinMessage(string ChannelName, string DisplayName, ushort? MessageId = null, ushort? RefMessageId = null) : IMessage
 {
     public string ToTcp()
     {
@@ -9,6 +11,20 @@ public record JoinMessage(string ChannelName, string DisplayName) : IMessage
 
     public byte[] ToUdp(byte[] messageId)
     {
-        throw new NotImplementedException();
+        using var ms = new MemoryStream();
+        using var bw = new BinaryWriter(ms);
+
+        bw.Write((byte) 0x03);
+        bw.Write(messageId);
+
+        // ChannelID
+        bw.Write(Encoding.UTF8.GetBytes(ChannelName));
+        bw.Write((byte) 0x00);
+
+        // DisplayName
+        bw.Write(Encoding.UTF8.GetBytes(DisplayName));
+        bw.Write((byte) 0x00);
+
+        return ms.ToArray();
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace IPK_2.Message;
+﻿using IPK_2.Util;
 
-public record AuthMessage(string Username, string DisplayName, string Token) : IMessage
+namespace IPK_2.Message;
+
+public record AuthMessage(string Username, string DisplayName, string Token, ushort? MessageId = null, ushort? RefMessageId = null) : IMessage
 {
     public string ToTcp()
     {
@@ -9,6 +11,15 @@ public record AuthMessage(string Username, string DisplayName, string Token) : I
 
     public byte[] ToUdp(byte[] messageId)
     {
-        throw new NotImplementedException();
+        using var ms = new MemoryStream();
+        using var bw = new BinaryWriter(ms);
+
+        bw.Write((byte) 0x02);
+        bw.Write(messageId);
+        BytesUtil.WriteStringBytes(bw, Username);
+        BytesUtil.WriteStringBytes(bw, DisplayName);
+        BytesUtil.WriteStringBytes(bw, Token);
+
+        return ms.ToArray();
     }
 }

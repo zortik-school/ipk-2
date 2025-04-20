@@ -51,14 +51,16 @@ public abstract class SocketClient
 
         if (!handled)
         {
-            Console.WriteLine("No handler for this input");
+            Console.Error.WriteLine("No handler for this input");
         }
 
         return messages;
     }
     
-    protected async Task HandleResponse(List<IMessage> messages, CancellationToken cancellationToken)
+    protected async Task<List<IMessage>> HandleResponse(List<IMessage> messages, CancellationToken cancellationToken)
     {
+        List<IMessage> toSend = [];
+        
         try
         {
             foreach (IMessage message in messages)
@@ -69,13 +71,17 @@ public abstract class SocketClient
                 {
                     RequestContext? requestContext = GetLastRequestContext(interceptor);
                 
-                    await interceptor.InterceptResponse(requestContext, context, cancellationToken);
+                    List<IMessage> toSend1 = await interceptor.InterceptResponse(requestContext, context, cancellationToken);
+                    
+                    toSend.AddRange(toSend1);
                 }
             }
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Console.Error.WriteLine(e);
         }
+        
+        return toSend;
     }
 }

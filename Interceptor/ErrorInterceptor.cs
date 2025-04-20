@@ -4,7 +4,7 @@ namespace IPK_2.Interceptor;
 
 public class ErrorInterceptor : IFlowInterceptor
 {
-    public Task InterceptResponse(RequestContext? lastRequestContext, ResponseContext context, CancellationToken cancellationToken)
+    public Task<List<IMessage>> InterceptResponse(RequestContext? lastRequestContext, ResponseContext context, CancellationToken cancellationToken)
     {
         if (context.Message is ErrorMessage error)
         {
@@ -13,6 +13,6 @@ public class ErrorInterceptor : IFlowInterceptor
             context.Client.Stop();
         }
         
-        return Task.CompletedTask;
+        return Task.FromResult(new List<IMessage>());
     }
 }
