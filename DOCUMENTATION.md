@@ -10,16 +10,9 @@
     - [Návrh implementace](#návrh-implementace)
 4. [Funkcionalita](#funkcionalita)
     - [Funkce programu](#funkce-programu)
-5. [Testování](#testování)
-    - [Co bylo testováno](#co-bylo-testováno)
-    - [Proč bylo testováno](#proč-bylo-testováno)
-    - [Jak bylo testováno](#jak-bylo-testováno)
-    - [Testovací prostředí](#testovací-prostředí)
-    - [Testovací scénáře a výsledky](#testovací-scénáře-a-výsledky)
+5. [Testy](#testy)
 6. [Spuštění aplikace](#spuštění-aplikace)
-7. [Známé chyby / omezení](#známé-chyby--omezení)
-8. [Použité zdroje a literatura](#použité-zdroje-a-literatura)
-9. [Licence a převzatý kód](#licence-a-převzatý-kód)
+7. [Licence a reference](#licence-a-reference)
 
 ---
 
@@ -94,40 +87,16 @@ Seznam všech možných příkazů lze vypsat pomocí příkazu /help. V přípa
 jako na zprávu, kterou je třeba zaslat do komunikačního kanálu. To ale pouze v případě, že je uživatel autorizován a je
 aktivní relace.
 
-## Testování
-
-### Co bylo testováno
-
-Výčet konkrétních testovaných částí – hlavní funkcionalita + hraniční případy.
-
-### Proč bylo testováno
-
-Vysvětli, proč jsou dané části kritické nebo náchylné k chybám.
-
-### Jak bylo testováno
-
-Metodika – ruční testování, skripty, automatické testy (např. xUnit), scénáře.
+## Testy
+V rámci testování byly otestovány příkazy, komunikace se serverem a jednotlivé funkcionality.
 
 ![tests.png](tests.png)
-
-### Testovací prostředí
-
-- **Hardware**: Např. notebook s Intel i5, 16 GB RAM
-- **Operační systém**: Windows 11 / Ubuntu 22.04
-- **Verze .NET SDK**: např. 9.0.100
-- **Použité nástroje**: Wireshark, Postman, terminál...
-
-### Testovací scénáře a výsledky
-
-| Scénář | Vstup | Očekávaný výstup | Skutečný výstup | Výsledek |
-|--------|-------|------------------|------------------|----------|
-| Správný požadavek | `GET localhost:1234` | `200 OK` | `200 OK` | ✅ |
-| Timeout serveru | server nedostupný | chyba připojení | chyba připojení | ✅ |
-| Chybný vstup | `GETT xyz` | chyba 400 | chyba 400 | ✅ |
-
-**Poznámka:** Výstupy piš textově – žádné screenshoty.
 
 
 ## Spuštění aplikace
 
 Aplikaci lze spustit sestavením pomocí příkazu `make` a následném spuštění zkompilovaného souboru.
+
+## Licence a reference
+
+Nejsem autor uvedených testů. Zdroj testů najdete [zde](https://github.com/Vlad6422/VUT_IPK_CLIENT_TESTS)
