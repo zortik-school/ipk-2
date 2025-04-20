@@ -1,11 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "xdqdBU1Srfs=",
+  "dgSpecHash": "h1WPXNW1Iqg=",
   "success": true,
-  "projectFilePath": "C:\\Users\\PC\\RiderProjects\\ipk-2\\IPK_2\\ipk25-client.csproj",
+  "projectFilePath": "/mnt/c/Users/PC/RiderProjects/ipk-2/IPK_2/ipk25-client.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\PC\\.nuget\\packages\\system.commandline\\2.0.0-beta4.22272.1\\system.commandline.2.0.0-beta4.22272.1.nupkg.sha512",
-    "C:\\Users\\PC\\.nuget\\packages\\system.commandline.namingconventionbinder\\2.0.0-beta4.22272.1\\system.commandline.namingconventionbinder.2.0.0-beta4.22272.1.nupkg.sha512"
+    "/home/zort/.nuget/packages/microsoft.net.illink.tasks/9.0.4/microsoft.net.illink.tasks.9.0.4.nupkg.sha512",
+    "/home/zort/.nuget/packages/system.commandline/2.0.0-beta4.22272.1/system.commandline.2.0.0-beta4.22272.1.nupkg.sha512",
+    "/home/zort/.nuget/packages/system.commandline.namingconventionbinder/2.0.0-beta4.22272.1/system.commandline.namingconventionbinder.2.0.0-beta4.22272.1.nupkg.sha512",
+    "/home/zort/.nuget/packages/microsoft.netcore.app.runtime.linux-x64/9.0.4/microsoft.netcore.app.runtime.linux-x64.9.0.4.nupkg.sha512",
+    "/home/zort/.nuget/packages/microsoft.aspnetcore.app.runtime.linux-x64/9.0.4/microsoft.aspnetcore.app.runtime.linux-x64.9.0.4.nupkg.sha512",
+    "/home/zort/.nuget/packages/microsoft.netcore.app.host.linux-x64/9.0.4/microsoft.netcore.app.host.linux-x64.9.0.4.nupkg.sha512"
   ],
   "logs": []
 }

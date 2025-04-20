@@ -135,7 +135,7 @@ public class Udp(string ip, int port) : SocketClient
                     else
                     {
                         _processedMessageIds.Add(refMessageId!);
-                        Console.Error.WriteLine($"Processed message with ID: {refMessageId:X4}");
+                        //Console.Error.WriteLine($"Processed message with ID: {refMessageId:X4}");
                     }
                 }
                 
@@ -164,7 +164,7 @@ public class Udp(string ip, int port) : SocketClient
                     
                     toSend.AddRange(toSend1);
                     
-                    Console.Error.WriteLine($"Processed message with ID: {messageId:X4}");
+                    //Console.Error.WriteLine($"Processed message with ID: {messageId:X4}");
                 }
             }
         }
@@ -179,7 +179,7 @@ public class Udp(string ip, int port) : SocketClient
 
         _client!.SendAsync(confirmData, confirmData.Length, _remoteEndPoint);
         
-        Console.Error.WriteLine($"Sent confirmation for message ID: {messageId:X4}");
+        //Console.Error.WriteLine($"Sent confirmation for message ID: {messageId:X4}");
     }
 
     private async Task StartSender(CancellationToken cancellationToken)
@@ -230,7 +230,7 @@ public class Udp(string ip, int port) : SocketClient
                 IPEndPoint remoteEndPoint = result.RemoteEndPoint;
                 byte[] data = result.Buffer;
                 
-                Console.Error.WriteLine($"Received data from {remoteEndPoint}: {BitConverter.ToString(data)}");
+                //Console.Error.WriteLine($"Received data from {remoteEndPoint}: {BitConverter.ToString(data)}");
 
                 _remoteEndPoint = remoteEndPoint;
 

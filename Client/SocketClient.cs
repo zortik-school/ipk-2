@@ -8,6 +8,19 @@ public abstract class SocketClient
     private readonly List<IFlowInterceptor> _lineInterceptors = [];
     private readonly Dictionary<IFlowInterceptor, RequestContext> _lastRequestContexts = new();
 
+    protected SocketClient()
+    {
+        Console.CancelKeyPress += (sender, e) =>
+        {
+            Console.Error.WriteLine("Stopping... (CTRL+C)");
+            
+            e.Cancel = true;
+            Stop();
+            
+            Environment.Exit(0);
+        };
+    }
+
     public abstract void Start();
 
     public abstract void Stop();

@@ -3,7 +3,7 @@
 CONFIGURATION=Release
 OUTPUT_DIR=bin/$(CONFIGURATION)
 
-all: build
+all: publish
 
 build:
 	dotnet build $(PROJECT_NAME).csproj -c $(CONFIGURATION)
