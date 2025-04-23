@@ -13,6 +13,7 @@ run:
 
 clean:
 	dotnet clean $(PROJECT_NAME).csproj
+	rm -f ipk25chat-client
 
 publish:
 	dotnet publish $(PROJECT_NAME).csproj -c $(CONFIGURATION) -r linux-x64 --self-contained true /p:PublishSingleFile=true -o $(OUTPUT_DIR)/publish

@@ -7,7 +7,7 @@ public static class BytesUtil
     
     public static void WriteNullTerminatedString(BinaryWriter writer, string value)
     {
-        byte[] strBytes = System.Text.Encoding.UTF8.GetBytes(value);
+        byte[] strBytes = Encoding.ASCII.GetBytes(value);
         writer.Write(strBytes);
         writer.Write((byte) 0x00);
     }
@@ -20,19 +20,26 @@ public static class BytesUtil
         {
             bytes.Add(b);
         }
-        return System.Text.Encoding.UTF8.GetString(bytes.ToArray());
+        return Encoding.ASCII.GetString(bytes.ToArray());
     }
     
     public static void WriteStringBytes(BinaryWriter writer, string value)
     {
-        writer.Write(Encoding.UTF8.GetBytes(value));
+        writer.Write(Encoding.ASCII.GetBytes(value));
         writer.Write((byte) 0x00);
     }
     
     public static string ReadStringBytes(BinaryReader reader)
     {
-        int length = reader.ReadByte();
-        byte[] stringBytes = reader.ReadBytes(length);
-        return Encoding.UTF8.GetString(stringBytes);
+        byte[] data = [];
+            
+        byte b;
+        while ((b = reader.ReadByte()) != 0)
+        {
+            Array.Resize(ref data, data.Length + 1);
+            
+            data[^1] = b;
+        }
+        return Encoding.ASCII.GetString(data);
     }
 }

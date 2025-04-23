@@ -18,11 +18,11 @@ public record JoinMessage(string ChannelName, string DisplayName, ushort? Messag
         bw.Write(messageId);
 
         // ChannelID
-        bw.Write(Encoding.UTF8.GetBytes(ChannelName));
+        bw.Write(Encoding.ASCII.GetBytes(ChannelName));
         bw.Write((byte) 0x00);
 
         // DisplayName
-        bw.Write(Encoding.UTF8.GetBytes(DisplayName));
+        bw.Write(Encoding.ASCII.GetBytes(DisplayName));
         bw.Write((byte) 0x00);
 
         return ms.ToArray();

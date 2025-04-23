@@ -41,7 +41,7 @@ public class Udp(string ip, int port) : SocketClient
                 StartSender(cancellationToken),
                 StartReceiver(cancellationToken)).Wait(cancellationToken);
         }
-        catch (OperationCanceledException e)
+        catch (OperationCanceledException)
         {
         }
     }
@@ -53,7 +53,7 @@ public class Udp(string ip, int port) : SocketClient
         return BitConverter.GetBytes(messageIdToSend);
     }
 
-    private async Task SendMessage(IMessage message, CancellationToken cancellationToken)
+    private async Task SendMessage(IMessage message)
     {
         byte[] messageId = GenerateMessageId();
         byte[] data = message.ToUdp(messageId);
@@ -122,11 +122,9 @@ public class Udp(string ip, int port) : SocketClient
             {
                 Console.Error.WriteLine("Received confirmation.");
                 
-                ushort? refMessageIdNullable = message.RefMessageId;
-
-                if (refMessageIdNullable != null)
+                if (message.RefMessageId != null)
                 {
-                    ushort refMessageId = (ushort)refMessageIdNullable;
+                    ushort refMessageId = (ushort) message.RefMessageId;
                 
                     if (_processedMessageIds.Contains(refMessageId))
                     {
@@ -195,7 +193,7 @@ public class Udp(string ip, int port) : SocketClient
 
             string[] args = message.Split(" ");
 
-            Task.Run(async () => await InterceptInputAndSend(args, cancellationToken), cancellationToken);
+            _ = Task.Run(async () => await InterceptInputAndSend(args, cancellationToken), cancellationToken);
         }
     }
 
@@ -205,7 +203,7 @@ public class Udp(string ip, int port) : SocketClient
                 
         foreach (IMessage messageToSend in messagesToSend)
         {
-            Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 if (messageToSend.ExpectsConfirmation())
                 {
@@ -213,7 +211,7 @@ public class Udp(string ip, int port) : SocketClient
                 }
                 else
                 {
-                    await SendMessage(messageToSend, cancellationToken);
+                    await SendMessage(messageToSend);
                 }
             }, cancellationToken);
         }
@@ -236,7 +234,7 @@ public class Udp(string ip, int port) : SocketClient
 
                 List<IMessage> messages = IMessage.ParseUdp(data);
 
-                Task.Run(async () =>
+                _ = Task.Run(async () =>
                 {
                     try
                     {
@@ -244,7 +242,7 @@ public class Udp(string ip, int port) : SocketClient
                     
                         foreach (IMessage messageToSend in messagesToSend)
                         {
-                            await SendMessage(messageToSend, cancellationToken);
+                            await SendMessage(messageToSend);
                         }
                     }
                     catch (Exception e)
@@ -260,7 +258,7 @@ public class Udp(string ip, int port) : SocketClient
                     continue;
                 }
 
-                Console.Error.WriteLine($"Chyba při příjmu dat: {e.Message}");
+                Console.Error.WriteLine($"Error while receiving data: {e.Message}");
             }
         }
     }

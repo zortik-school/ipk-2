@@ -16,7 +16,8 @@ public interface IMessage
         ConfirmMessage.ParseUdp,
         MsgMessage.ParseUdp,
         PingMessage.ParseUdp,
-        ErrorMessage.ParseUdp
+        ErrorMessage.ParseUdp,
+        ByeMessage.ParseUdp
     ];
 
     ushort? MessageId { get; }

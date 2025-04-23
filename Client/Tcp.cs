@@ -1,7 +1,6 @@
 ﻿using System.Net.Sockets;
 using System.Text;
 using IPK_2.Message;
-using IPK_2.Util;
 
 namespace IPK_2.Client;
 
@@ -26,7 +25,7 @@ public class Tcp(string ip, int port) : SocketClient
                 StartSender(cancellationToken),
                 StartReceiver(_stream, cancellationToken)).Wait(cancellationToken);
         }
-        catch (OperationCanceledException e)
+        catch (OperationCanceledException)
         {
         }
     }
@@ -53,7 +52,7 @@ public class Tcp(string ip, int port) : SocketClient
 
                 string[] args = message.Split(" ");
             
-                Task.Run(async () =>
+                _ = Task.Run(async () =>
                 {
                     try
                     {
@@ -71,7 +70,7 @@ public class Tcp(string ip, int port) : SocketClient
                 }, cancellationToken);
             }
         }
-        catch (OperationCanceledException e)
+        catch (OperationCanceledException)
         {
         }
     }
@@ -91,11 +90,11 @@ public class Tcp(string ip, int port) : SocketClient
                     break;
                 }
                 
-                string response = Encoding.UTF8.GetString(data, 0, count);
+                string response = Encoding.ASCII.GetString(data, 0, count);
 
                 List<IMessage> messages = IMessage.ParseTcp(response);
 
-                Task.Run(async () =>
+                _ = Task.Run(async () =>
                 {
                     List<IMessage> messagesToSend = await HandleResponse(messages, cancellationToken);
                     
@@ -106,7 +105,7 @@ public class Tcp(string ip, int port) : SocketClient
                 }, cancellationToken);
             }
         }
-        catch (OperationCanceledException e)
+        catch (OperationCanceledException)
         {
         }
     }
